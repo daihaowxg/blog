@@ -8,6 +8,7 @@ import IconTelegram from "@/assets/icons/IconTelegram.svg";
 import IconPinterest from "@/assets/icons/IconPinterest.svg";
 import { SITE } from "@/config";
 
+// 配置社交链接：https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/#configuring-social-links
 export const SOCIALS = [
   {
     name: "Github",
@@ -35,6 +36,7 @@ export const SOCIALS = [
   },
 ] as const;
 
+// 配置分享链接：https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/#configuring-share-links
 export const SHARE_LINKS = [
   {
     name: "WhatsApp",

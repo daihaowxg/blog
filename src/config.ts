@@ -1,8 +1,9 @@
+// 具体配置详见：https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/#configuring-site
 export const SITE = {
   website: "https://astro-paper.pages.dev/", // replace this with your deployed domain
   author: "wxg",
-  profile: "https://satnaing.dev/",
-  desc: "A minimal, responsive and SEO-friendly Astro blog theme.",
+  profile: "",
+  desc: "daihaowxg 的 blog，这个神秘的男人也不知道他会写出什么东西。",
   title: "daihaowxg",
   ogImage: "astropaper-og.jpg",
   lightAndDarkMode: true,
@@ -12,11 +13,11 @@ export const SITE = {
   showArchives: true,
   showBackButton: true, // show back button in post detail
   editPost: {
-    enabled: true,
+    enabled: false,
     text: "Suggest Changes",
     url: "https://github.com/satnaing/astro-paper/edit/main/",
   },
-  dynamicOgImage: true,
-  lang: "en", // html lang code. Set this empty and default will be "en"
-  timezone: "Asia/Shanghai", // Default global timezone (IANA format) https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  dynamicOgImage: false,
+  lang: "zh-CN",
+  timezone: "Asia/Shanghai",
 } as const;

@@ -1,0 +1,37 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ] # 当代码推送到 main 分支时触发 workflow
+  workflow_dispatch:    # 允许在 GitHub Actions 页面手动触发 workflow
+
+permissions:
+  contents: read      # 读取仓库内容的权限
+  pages: write        # 写入 GitHub Pages（部署）权限
+  id-token: write     # 写入身份令牌，用于 OIDC 认证
+
+jobs:
+  build:
+    runs-on: ubuntu-latest # 在最新的 Ubuntu 环境中运行
+    steps:
+      - name: Checkout your repository using git
+        uses: actions/checkout@v4 # 拉取仓库代码
+
+      - name: Install, build, and upload your site
+        uses: withastro/action@v3 # 使用 Astro 官方 Action 进行安装、构建和上传
+          # with:
+          # path: . # Astro 项目的根目录（可选）
+        # node-version: 20 # 使用的 Node.js 版本（可选，默认 20）
+        # package-manager: pnpm@latest # 使用的包管理器，可自动识别（可选）
+
+  deploy:
+    needs: build # 此任务依赖 build 任务执行完成
+    runs-on: ubuntu-latest # 在最新的 Ubuntu 环境中运行
+    environment:
+      name: github-pages # 部署的环境名称
+      url: ${{ steps.deployment.outputs.page_url }} # 部署完成后页面的 URL
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 # 使用 GitHub 官方 Action 将站点部署到 Pages

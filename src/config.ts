@@ -1,6 +1,6 @@
 // 具体配置详见：https://astro-paper.pages.dev/posts/how-to-configure-astropaper-theme/#configuring-site
 export const SITE = {
-  website: "https://astro-paper.pages.dev/", // replace this with your deployed domain
+  website: "https://daihaowxg.github.io", // replace this with your deployed domain
   author: "wxg",
   profile: "",
   desc: "daihaowxg 的 blog，这个神秘的男人也不知道他会写出什么东西。",

@@ -11,9 +11,10 @@ tags:
 
 本文讨论了几种常见的命名风格，比如 camelCase、PascalCase、snake_case、SCREAMING_SNAKE_CASE、kebab-case。
 
-## Prompt 汇总
+## 目录
 
-Git Message 生成
+## Git Message 生成
+
 ```markdown
 你是一个专业的 Git 提交信息生成助手，请根据以下代码改动内容生成一条规范的 Git Commit Message。要求如下：
 

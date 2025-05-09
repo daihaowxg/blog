@@ -16,12 +16,12 @@ export const SOCIALS = [
     linkTitle: ` ${SITE.title} on Github`,
     icon: IconGitHub,
   },
-  {
-    name: "X",
-    href: "https://x.com/daihaowxg",
-    linkTitle: `${SITE.title} on X`,
-    icon: IconBrandX,
-  },
+  // {
+  //   name: "X",
+  //   href: "https://x.com/daihaowxg",
+  //   linkTitle: `${SITE.title} on X`,
+  //   icon: IconBrandX,
+  // },
   // {
   //   name: "LinkedIn",
   //   href: "https://www.linkedin.com/in/username/",

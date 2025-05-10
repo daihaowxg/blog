@@ -350,3 +350,201 @@ function MyButton() {
     );
 }
 ```
+
+注意 `onClick={handleClick}` 后面是没有括号的，这里只需要传递函数就可以了，不需要调用事件处理函数（`handleClick()`
+这种写法是调用函数的写法）。当用户点击按钮时，React 会调用你的事件处理函数。
+
+## 8. useState 的用法
+
+有时候我们会希望组件能“记住”某些信息并显示出来。比如说，你可能想要统计按钮被点击的次数。此时可以使用 `useState` 向组件添加状态。
+
+首先，从 React 导入 `useState` ：
+
+```
+import { useState } from 'react';
+```
+
+然后就可以在组件内部声明一个状态变量（state variable）：
+
+```
+function MyButton() {
+  const [count, setCount] = useState(0);
+  // ...
+```
+
+使用 `useState` 之后我们可以得到两样东西：当前的状态（ `count` ）和用于更新它的函数（ `setCount`
+）。你可以为它们任意命名，但惯例是写成 `[something, setSomething]`。
+
+按钮首次显示时， `count` 将为 0 ，因为你将 0 传递给了 `useState()` 。当你想改变状态时，调用 `setCount()`
+并将新值传递给它。点击此按钮将增加计数器：
+
+```jsx
+function MyButton() {
+    const [count, setCount] = useState(0);
+
+    function handleClick() {
+        setCount(count + 1);
+    }
+
+    return (
+        <button onClick={handleClick}>
+            Clicked {count} times
+        </button>
+    );
+}
+```
+
+React 会再次调用你的组件函数。这一次， `count` 会是 1。接着它会变成 2。以此类推。
+
+即使多次渲染同一个组件，每个组件也都会拥有自己的状态：
+
+```js
+import {useState} from 'react';
+
+export default function MyApp() {
+    return (
+        <div>
+            <h1>Counters that update separately</h1>
+            <MyButton/>
+            <MyButton/>
+        </div>
+    );
+}
+
+function MyButton() {
+    const [count, setCount] = useState(0);
+
+    function handleClick() {
+        setCount(count + 1);
+    }
+
+    return (
+        <button onClick={handleClick}>
+            Clicked {count} times
+        </button>
+    );
+}
+```
+
+## 9. Hooks
+
+以 `use` 开头的函数称为 Hook。 `useState` 是 React 提供的内置
+Hook。你可以在 [API 参考中](https://react.dev/reference/react)找到其他内置 Hook。你也可以通过组合现有的 Hook 来编写自己的
+Hook。
+
+Hook 比其他函数有更多限制。你只能在组件（或其他 Hook）的顶层调用 Hook。如果想在条件或循环中使用 `useState` ，请提取一个新组件并将其放在那里。
+
+## 10. 使用 props 在组件间共享数据
+
+在前面的例子中，每个 `MyButton` 都有自己独立的 `count` ，当点击按钮时，只有被点击按钮的 `count`
+发生了变化，另一个 `MyButton` 的 `count` 不会变。
+
+如果想要让两个 `MyButton` 组件显示相同的 `count` 并同步更新，那就需要将状态从单个按钮“向上”移动到包含它们所有的最接近的组件中。
+
+在这个例子中就是要把状态变量移动到 `MyApp` 组件中，然后状态从 `MyApp` 传递给两个子组件 `MyButton`
+。当点击其中一个 `MyButton` 时，`MyApp` 会将其 `count` 状态更新为 1 ，并将该状态传递给两个子组件。
+
+以下是代码实现方式：
+
+首先，将状态从 MyButton 提升至 MyApp ：
+
+```jsx
+export default function MyApp() {
+    // 以前这个 useState 和 handleClick 在 MyButton 组件中，现在挪到了 MyApp 中
+    const [count, setCount] = useState(0);
+
+    function handleClick() {
+        setCount(count + 1);
+    }
+
+    return (
+        <div>
+            <h1>Counters that update separately</h1>
+            <MyButton/>
+            <MyButton/>
+        </div>
+    );
+}
+
+function MyButton() {
+    // ... we're moving code from here ...
+}
+```
+
+然后，将状态从 `MyApp` 向下传递给每个 `MyButton` ，同时传递共享的点击处理函数。你可以使用 JSX 花括号向 `MyButton`
+传递信息，就像之前对内置标签如 `<img>` 所做的那样：
+
+```jsx
+export default function MyApp() {
+    const [count, setCount] = useState(0);
+
+    function handleClick() {
+        setCount(count + 1);
+    }
+
+    return (
+        <div>
+            <h1>Counters that update together</h1>
+            <MyButton count={count} onClick={handleClick}/>
+            <MyButton count={count} onClick={handleClick}/>
+        </div>
+    );
+}
+```
+
+以这种方式传递的信息称为 props。现在， `MyApp` 组件包含 `count` 状态和 `handleClick` 事件处理器，并将它们作为 props
+传递给每个按钮。
+
+最后，将 `MyButton` 修改为读取从父组件传递过来的 props：
+
+```jsx
+function MyButton({count, onClick}) {
+    return (
+        <button onClick={onClick}>
+            Clicked {count} times
+        </button>
+    );
+}
+```
+
+props 的定义方式就是在函数组件的函数传参中使用花括号{}声明。
+
+当你点击按钮时， `onClick` 处理函数会被触发。每个按钮的 `onClick` 属性都被设置为 `MyApp` 中的 `handleClick`
+函数，因此其中的代码会执行。该代码调用
+`setCount(count + 1)` ，递增 `count` 状态变量。新的 `count` 值会作为 `prop`
+传递给每个按钮，所以它们都会显示新值。这被称为“状态提升”。通过将状态上移，你在组件之间实现了状态共享。
+
+完整代码：
+
+```jsx
+import { useState } from 'react';
+
+export default function MyApp() {
+  // 父组件中定义共享状态
+  const [count, setCount] = useState(0);
+
+  function handleClick() {
+    setCount(count + 1);
+  }
+
+  return (
+    <div>
+      <h1>Counters that update together</h1>
+      // 使用 JSX 花括号将共享状态传递给子组件
+      <MyButton count={count} onClick={handleClick} />
+      <MyButton count={count} onClick={handleClick} />
+    </div>
+  );
+}
+
+// 子组件定义 props 接收
+function MyButton({ count, onClick }) {
+  return (
+    // 点击按钮时触发 handleClick 函数，共享状态被修改，然后又通过 props 传递给另一个子组件
+    <button onClick={onClick}>
+      Clicked {count} times
+    </button>
+  );
+}
+
+```
